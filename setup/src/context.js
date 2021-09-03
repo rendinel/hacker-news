@@ -46,13 +46,25 @@ const AppProvider = ({ children }) => {
   const removeStory = (id) => {
     dispatch({ type: REMOVE_STORY, payload: id })
   }
+  //05 we grab the input value with query and pass to out reduce function with payload
+  const handleSearch = (query) => {
+    dispatch({ type: HANDLE_SEARCH, payload: query })
+  }
+  // 06 with payload we are grabbing inc and dec from our onclick on buttons
+  const handlePage = (value) => {
+    dispatch({ type: HANDLE_PAGE, payload: value })
+  }
 
   //01 we call fetch stories the fitst time we render the page
   useEffect(() => {
     fetchStories(`${API_ENDPOINT}query=${state.query}&page=${state.page}`)
-  }, [])
+  }, [state.query, state.page])
+  //05 we fetch stories every time that the query value inside state change
+  //06 we also need fetch every time our page chenge
   return (
-    <AppContext.Provider value={{ ...state, removeStory }}>
+    <AppContext.Provider
+      value={{ ...state, removeStory, handleSearch, handlePage }}
+    >
       {children}
     </AppContext.Provider>
   )
